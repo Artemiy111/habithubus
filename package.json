@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio",
+    "db:seed": "ts-node --transpile-only scripts/seed.ts"
   },
   "dependencies": {
     "@aws-sdk/client-rds-data": "latest",
@@ -55,6 +58,7 @@
     "@xata.io/client": "latest",
     "autoprefixer": "^10.4.20",
     "bcryptjs": "latest",
+    "better-auth": "^1.2.7",
     "better-sqlite3": "latest",
     "bun-types": "latest",
     "canvas-confetti": "latest",

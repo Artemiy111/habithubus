@@ -2,21 +2,54 @@ import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
 import { relations } from 'drizzle-orm'
 import { v4 as uuidv4 } from 'uuid'
 
-// Таблица пользователей
-export const users = sqliteTable('users', {
-  id: text('id')
-    .primaryKey()
-    .$defaultFn(() => uuidv4()),
-  email: text('email').notNull().unique(),
+
+export const users = sqliteTable("users", {
+  id: text("id").primaryKey(),
   name: text('name').notNull(),
-  password: text('password').notNull(),
-  githubId: text('github_id').unique(), // Добавляем поле для GitHub ID
-  createdAt: integer('created_at', { mode: 'timestamp' })
-    .$defaultFn(() => new Date())
-    .notNull(),
+  email: text('email').notNull().unique(),
+  emailVerified: integer('email_verified', { mode: 'boolean' }).notNull(),
+  image: text('image'),
+  createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
+  updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull()
 })
 
-// Обновляем схему привычек, добавляя поле status
+export const sessions = sqliteTable("sessions", {
+  id: text("id").primaryKey(),
+  expiresAt: integer('expires_at', { mode: 'timestamp' }).notNull(),
+  token: text('token').notNull().unique(),
+  createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
+  updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull(),
+  ipAddress: text('ip_address'),
+  userAgent: text('user_agent'),
+  userId: text('user_id').notNull().references(() => users.id, { onDelete: 'cascade' })
+})
+
+export const accounts = sqliteTable("accounts", {
+  id: text("id").primaryKey(),
+  accountId: text('account_id').notNull(),
+  providerId: text('provider_id').notNull(),
+  userId: text('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  accessToken: text('access_token'),
+  refreshToken: text('refresh_token'),
+  idToken: text('id_token'),
+  accessTokenExpiresAt: integer('access_token_expires_at', { mode: 'timestamp' }),
+  refreshTokenExpiresAt: integer('refresh_token_expires_at', { mode: 'timestamp' }),
+  scope: text('scope'),
+  password: text('password'),
+  createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
+  updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull()
+})
+
+export const verifications = sqliteTable("verifications", {
+  id: text("id").primaryKey(),
+  identifier: text('identifier').notNull(),
+  value: text('value').notNull(),
+  expiresAt: integer('expires_at', { mode: 'timestamp' }).notNull(),
+  createdAt: integer('created_at', { mode: 'timestamp' }),
+  updatedAt: integer('updated_at', { mode: 'timestamp' })
+})
+
+
 export const habits = sqliteTable('habits', {
   id: text('id')
     .primaryKey()
@@ -68,7 +101,6 @@ export const userSettings = sqliteTable('user_settings', {
   }).default('daily'),
 })
 
-// Добавляем таблицу для хранения достижений пользователя
 export const userAchievements = sqliteTable('user_achievements', {
   id: text('id')
     .primaryKey()
@@ -82,7 +114,6 @@ export const userAchievements = sqliteTable('user_achievements', {
     .notNull(),
 })
 
-// Определяем отношения между таблицами
 export const usersRelations = relations(users, ({ many }) => ({
   habits: many(habits),
   settings: many(userSettings),

@@ -3,6 +3,8 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Github } from 'lucide-react'
+import { authClient } from '@/lib/auth-client'
+import { useToast } from '@/hooks/use-toast'
 
 interface GitHubButtonProps {
   variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link'
@@ -11,10 +13,17 @@ interface GitHubButtonProps {
 
 export default function GitHubButton({ variant = 'outline', isLoading = false }: GitHubButtonProps) {
   const [loading, setLoading] = useState(isLoading)
+const toast =  useToast()
 
-  const handleGitHubLogin = () => {
+  const handleGitHubLogin = async () => {
     setLoading(true)
-    window.location.href = '/api/auth/github'
+    const result = await authClient.signIn.social({provider: 'github' })
+    setLoading(false)
+    if (result.error) {
+      toast.toast({'title': 'Ошибка входа', 'description': result.error.statusText, 'variant': 'destructive'})
+      return
+    } 
+    toast.toast({'title': 'Вход успешен', 'description': 'Вы успешно вошли', 'variant': 'default'})
   }
 
   return (

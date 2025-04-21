@@ -3,82 +3,52 @@
 import { useState, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
-import { login } from '@/lib/auth/actions'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { Alert, AlertDescription } from '@/components/ui/alert'
 import GitHubButton from './github-button'
+import { authClient } from '@/lib/auth-client'
+import {  z } from 'zod'
+import { useToast } from '@/hooks/use-toast'
+
+const registerSchema = z.object({
+  email: z.string().email('Введите корректный email'),
+  name: z.string().min(2, 'Имя должно содержать минимум 2 символа'),
+  password: z.string().min(6, 'Пароль должен содержать минимум 6 символов'),
+})
+
+// Схема валидации для входа
+const loginSchema = z.object({
+  email: z.string().email('Введите корректный email'),
+  password: z.string().min(1, 'Введите пароль'),
+})
 
 export default function LoginForm() {
-  const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
-  const [success, setSuccess] = useState<string | null>(null)
   const router = useRouter()
   const searchParams = useSearchParams()
 
-  useEffect(() => {
-    // Проверяем, пришел ли пользователь после успешной регистрации
-    const registered = searchParams.get('registered')
-    if (registered === 'true') {
-      setSuccess('Регистрация успешна! Теперь вы можете войти.')
-    }
-
-    // Проверяем ошибки OAuth
-    const error = searchParams.get('error')
-    if (error) {
-      switch (error) {
-        case 'github_auth_error':
-          setError('Ошибка при авторизации через GitHub. Пожалуйста, попробуйте снова.')
-          break
-        case 'invalid_state':
-          setError('Недействительный запрос авторизации. Пожалуйста, попробуйте снова.')
-          break
-        case 'no_code':
-          setError('Не получен код авторизации от GitHub. Пожалуйста, попробуйте снова.')
-          break
-        case 'token_error':
-          setError('Ошибка при получении токена доступа. Пожалуйста, попробуйте снова.')
-          break
-        case 'user_error':
-          setError('Ошибка при получении данных пользователя. Пожалуйста, попробуйте снова.')
-          break
-        case 'email_error':
-          setError('Не удалось получить email пользователя. Пожалуйста, убедитесь, что ваш email в GitHub публичный.')
-          break
-        default:
-          setError('Произошла ошибка при входе. Пожалуйста, попробуйте снова.')
-      }
-    }
-  }, [searchParams])
+  const toast =  useToast()
+  
 
   async function handleSubmit(formData: FormData) {
     setIsLoading(true)
-    setError(null)
-    setSuccess(null)
 
-    try {
-      const result = await login(formData)
-
-      if (result) {
-        if (result.success && result.redirectUrl) {
-          console.log('Login successful, redirecting to:', result.redirectUrl)
-          router.push(result.redirectUrl)
-          // Добавляем небольшую задержку перед перенаправлением
-          setTimeout(() => {
-            window.location.href = result.redirectUrl
-          }, 100)
-        } else if (!result.success) {
-          setError(result.error)
-          setIsLoading(false)
-        }
-      }
-    } catch (error) {
-      console.error('Error during login:', error)
-      setError('Произошла ошибка при входе. Пожалуйста, попробуйте снова.')
-      setIsLoading(false)
+    const _data = loginSchema.safeParse(Object.fromEntries(formData.entries())) 
+    if (_data.error) {
+      toast.toast({'title': 'Ошибка ввода', 'description': _data.error.errors[0].message, 'variant': 'destructive'})
+      return
     }
+
+    const result = await authClient.signIn.email(_data.data)
+
+    setIsLoading(false)
+    if (result.error) {
+      toast.toast({'title': 'Ошибка входа', 'description': result.error.statusText, 'variant': 'destructive'})
+      return
+    }
+    toast.toast({'title': 'Вход успешен', 'description': 'Вы успешно вошли', 'variant': 'default'})
   }
 
   return (
@@ -88,17 +58,6 @@ export default function LoginForm() {
         <CardDescription>Войдите в свой аккаунт</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        {error && (
-          <Alert variant="destructive">
-            <AlertDescription>{error}</AlertDescription>
-          </Alert>
-        )}
-
-        {success && (
-          <Alert className="bg-green-50 text-green-800 border-green-200">
-            <AlertDescription>{success}</AlertDescription>
-          </Alert>
-        )}
 
         <GitHubButton />
 

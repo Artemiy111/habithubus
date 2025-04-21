@@ -52,27 +52,6 @@ export async function getUserById(id: string) {
   }
 }
 
-export async function createUser(userData: { email: string; name: string; password: string; githubId?: string }) {
-  try {
-    await ensureDatabaseConnection()
-
-    const [user] = await db
-      .insert(users)
-      .values({
-        id: uuidv4(),
-        email: userData.email,
-        name: userData.name,
-        password: userData.password,
-        githubId: userData.githubId,
-      })
-      .returning()
-
-    return user
-  } catch (error) {
-    console.error('Ошибка при создании пользователя:', error)
-    throw new Error('Не удалось создать пользователя. Пожалуйста, попробуйте позже.')
-  }
-}
 
 export async function createUserSettings(userId: string) {
   try {

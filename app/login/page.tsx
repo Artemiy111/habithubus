@@ -1,7 +1,14 @@
 import { Suspense } from 'react'
 import LoginForm from '@/components/auth/login-form'
+import { auth } from '@/lib/auth'
+import { headers } from 'next/headers'
 
-export default function LoginPage() {
+export default async function LoginPage() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  })
+  console.log('sees', session)
+
   return (
     <div className="container flex items-center justify-center min-h-screen py-12">
       <div className="w-full max-w-md">

@@ -1,20 +1,22 @@
 import { redirect } from 'next/navigation'
 import HabitDashboard from '@/components/habit-dashboard'
-import { getCurrentUser } from '@/lib/auth/utils'
 import LogoutButton from '@/components/auth/logout-button'
 import SettingsDialog from '@/components/settings-dialog'
 import HabitFormDialog from '@/components/habit-form-dialog'
 import { getUserSettings, saveUserSettings } from '@/lib/db/actions'
 import type { UserSettings } from '@/lib/types'
+import { auth } from '@/lib/auth'
+import { headers } from 'next/headers'
 
 export default async function Home() {
-  const user = await getCurrentUser()
-
-  if (!user) {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  })
+  if (!session?.user) {
     redirect('/login')
   }
+  const { user } = session
 
-  // Получаем настройки пользователя
   const userSettings = (await getUserSettings(user.id)) || {
     theme: 'system',
     primaryColor: 'blue',
@@ -25,7 +27,6 @@ export default async function Home() {
     reminderFrequency: 'daily',
   }
 
-  // Функция для сохранения настроек
   async function handleSettingsChange(settings: UserSettings) {
     'use server'
     if (user) {

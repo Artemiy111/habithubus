@@ -9,14 +9,8 @@ import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import GitHubButton from './github-button'
 import { authClient } from '@/lib/auth-client'
-import {  z } from 'zod'
+import { z } from 'zod'
 import { useToast } from '@/hooks/use-toast'
-
-const registerSchema = z.object({
-  email: z.string().email('Введите корректный email'),
-  name: z.string().min(2, 'Имя должно содержать минимум 2 символа'),
-  password: z.string().min(6, 'Пароль должен содержать минимум 6 символов'),
-})
 
 // Схема валидации для входа
 const loginSchema = z.object({
@@ -26,29 +20,26 @@ const loginSchema = z.object({
 
 export default function LoginForm() {
   const [isLoading, setIsLoading] = useState(false)
-  const router = useRouter()
-  const searchParams = useSearchParams()
 
-  const toast =  useToast()
-  
+  const toast = useToast()
 
   async function handleSubmit(formData: FormData) {
     setIsLoading(true)
 
-    const _data = loginSchema.safeParse(Object.fromEntries(formData.entries())) 
+    const _data = loginSchema.safeParse(Object.fromEntries(formData.entries()))
     if (_data.error) {
-      toast.toast({'title': 'Ошибка ввода', 'description': _data.error.errors[0].message, 'variant': 'destructive'})
+      toast.toast({ title: 'Ошибка ввода', description: _data.error.errors[0].message, variant: 'destructive' })
       return
     }
 
-    const result = await authClient.signIn.email(_data.data)
+    const result = await authClient.signIn.email({ ..._data.data, callbackURL: '/' })
 
     setIsLoading(false)
     if (result.error) {
-      toast.toast({'title': 'Ошибка входа', 'description': result.error.statusText, 'variant': 'destructive'})
+      toast.toast({ title: 'Ошибка входа', description: result.error.statusText, variant: 'destructive' })
       return
     }
-    toast.toast({'title': 'Вход успешен', 'description': 'Вы успешно вошли', 'variant': 'default'})
+    toast.toast({ title: 'Вход успешен', description: 'Вы успешно вошли', variant: 'default' })
   }
 
   return (
@@ -58,7 +49,6 @@ export default function LoginForm() {
         <CardDescription>Войдите в свой аккаунт</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-
         <GitHubButton />
 
         <div className="relative">

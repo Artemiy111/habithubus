@@ -13,17 +13,18 @@ interface GitHubButtonProps {
 
 export default function GitHubButton({ variant = 'outline', isLoading = false }: GitHubButtonProps) {
   const [loading, setLoading] = useState(isLoading)
-const toast =  useToast()
+  const toast = useToast()
 
   const handleGitHubLogin = async () => {
     setLoading(true)
-    const result = await authClient.signIn.social({provider: 'github' })
+    const result = await authClient.signIn.social({ provider: 'github' })
+    console.log(result)
     setLoading(false)
     if (result.error) {
-      toast.toast({'title': 'Ошибка входа', 'description': result.error.statusText, 'variant': 'destructive'})
+      toast.toast({ title: 'Ошибка входа', description: result.error.statusText, variant: 'destructive' })
       return
-    } 
-    toast.toast({'title': 'Вход успешен', 'description': 'Вы успешно вошли', 'variant': 'default'})
+    }
+    toast.toast({ title: 'Вход успешен', description: 'Вы успешно вошли', variant: 'default' })
   }
 
   return (

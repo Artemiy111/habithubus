@@ -3,33 +3,44 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { register } from '@/lib/auth/actions'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import GitHubButton from './github-button'
+import { z } from 'zod'
+import { authClient } from '@/lib/auth-client'
+import { useToast } from '@/hooks/use-toast'
+
+const registerSchema = z.object({
+  email: z.string().email('Введите корректный email'),
+  name: z.string().min(2, 'Имя должно содержать минимум 2 символа'),
+  password: z.string().min(6, 'Пароль должен содержать минимум 6 символов'),
+})
 
 export default function RegisterForm() {
-  const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
-  const router = useRouter()
+
+  const toast = useToast()
 
   async function handleSubmit(formData: FormData) {
     setIsLoading(true)
-    setError(null)
 
-    const result = await register(formData)
-
-    if (result) {
-      if (result.success && result.redirectUrl) {
-        router.push(result.redirectUrl)
-      } else if (!result.success) {
-        setError(result.error)
-        setIsLoading(false)
-      }
+    const _data = registerSchema.safeParse(Object.fromEntries(formData.entries()))
+    if (_data.error) {
+      toast.toast({ title: 'Ошибка регистрации', description: _data.error.errors[0].message, variant: 'destructive' })
+      return
     }
+
+    const result = await authClient.signUp.email({ ..._data.data, callbackURL: '/' })
+
+    setIsLoading(false)
+    if (result.error) {
+      toast.toast({ title: 'Ошибка регистрации', description: result.error.statusText, variant: 'destructive' })
+      return
+    }
+    toast.toast({ title: 'Регистрация успешена', description: 'Вы успешно вошли', variant: 'default' })
   }
 
   return (
@@ -39,12 +50,6 @@ export default function RegisterForm() {
         <CardDescription>Создайте аккаунт для отслеживания привычек</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        {error && (
-          <Alert variant="destructive">
-            <AlertDescription>{error}</AlertDescription>
-          </Alert>
-        )}
-
         <GitHubButton />
 
         <div className="relative">

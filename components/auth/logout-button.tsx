@@ -1,21 +1,15 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
-import { logout } from '@/lib/auth/actions'
+import { authClient } from '@/lib/auth-client'
 
 export default function LogoutButton() {
   const [isLoading, setIsLoading] = useState(false)
-  const router = useRouter()
-
   const handleLogout = async () => {
     try {
       setIsLoading(true)
-      const redirectUrl = await logout()
-      if (redirectUrl) {
-        router.push(redirectUrl)
-      }
+      await authClient.signOut()
     } catch (error) {
       console.error('Ошибка при выходе:', error)
     } finally {

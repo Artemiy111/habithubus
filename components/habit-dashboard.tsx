@@ -10,9 +10,7 @@ import ShareProgress from '@/components/share-progress'
 import type { Habit, HabitCompletion } from '@/lib/types'
 import confetti from 'canvas-confetti'
 
-// Import the theme context
 import { useThemeContext } from '@/lib/theme-context'
-// Import the indicator
 import { SettingsAppliedIndicator } from '@/components/settings-applied-indicator'
 import {
   updateHabit as updateHabitAction,
@@ -50,10 +48,8 @@ export default function HabitDashboard({ userId }: HabitDashboardProps) {
   const [showSettingsApplied, setShowSettingsApplied] = useState(false)
   const [unlockedAchievements, setUnlockedAchievements] = useState<string[]>([])
 
-  // Add inside the component
   const { setPrimaryColor } = useThemeContext()
 
-  // Загрузка данных из базы данных
   useEffect(() => {
     let isMounted = true
 
@@ -62,22 +58,18 @@ export default function HabitDashboard({ userId }: HabitDashboardProps) {
 
       setIsLoading(true)
       try {
-        // Загружаем привычки
         const userHabits = await getUserHabits(userId)
         if (isMounted) setHabits(userHabits)
 
-        // Загружаем выполнения
         const userCompletions = await getUserCompletions(userId)
         if (isMounted) setCompletions(userCompletions)
 
-        // Загружаем настройки
         const userSettings = await getUserSettings(userId)
         if (userSettings && isMounted) {
           setSettings(userSettings)
           setPrimaryColor(userSettings.primaryColor as any)
         }
 
-        // Загружаем достижения
         const achievements = await getUserAchievements(userId)
         if (isMounted) setUnlockedAchievements(achievements)
       } catch (error) {
@@ -99,7 +91,6 @@ export default function HabitDashboard({ userId }: HabitDashboardProps) {
       const habit = await updateHabitAction(updatedHabit)
       setHabits(habits.map((h) => (h.id === habit.id ? habit : h)))
 
-      // Обновим страницу для отображения изменений
       window.location.reload()
     } catch (error) {
       console.error('Ошибка при обновлении привычки:', error)
@@ -123,13 +114,10 @@ export default function HabitDashboard({ userId }: HabitDashboardProps) {
       const updatedCompletion = await toggleCompletionAction(habitId, date, !existingCompletion)
 
       if (existingCompletion) {
-        // Remove completion if it exists
         setCompletions(completions.filter((c) => !(c.habitId === habitId && c.date === date)))
       } else {
-        // Add new completion
         setCompletions([...completions, updatedCompletion])
 
-        // Show confetti if enabled
         if (settings.showConfetti) {
           confetti({
             particleCount: 100,
@@ -148,15 +136,12 @@ export default function HabitDashboard({ userId }: HabitDashboardProps) {
     // Это будет реализовано в компоненте HabitList
   }
 
-  // Update the handleSettingsChange function
   const handleSettingsChange = async (newSettings: UserSettings) => {
     try {
-      // Сначала применяем настройки темы
       if (newSettings.theme !== settings.theme) {
         document.documentElement.setAttribute('data-theme', newSettings.theme)
       }
 
-      // Затем сохраняем настройки в базу данных
       await saveUserSettings(userId, newSettings)
       setSettings(newSettings)
       setPrimaryColor(newSettings.primaryColor as any)

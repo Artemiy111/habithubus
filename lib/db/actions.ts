@@ -52,7 +52,6 @@ export async function getUserById(id: string) {
   }
 }
 
-
 export async function createUserSettings(userId: string) {
   try {
     await ensureDatabaseConnection()

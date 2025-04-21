@@ -1,22 +1,22 @@
-"use server"
+'use server'
 
-import { db, checkDatabaseConnection } from "@/lib/db"
-import { users, userSettings, habits, completions, userAchievements } from "@/lib/db/schema"
-import { eq, and } from "drizzle-orm"
-import type { Habit, HabitCompletion } from "@/lib/types"
-import type { UserSettings } from "@/components/settings-dialog"
-import { v4 as uuidv4 } from "uuid"
+import { db, checkDatabaseConnection } from '@/lib/db'
+import { users, userSettings, habits, completions, userAchievements } from '@/lib/db/schema'
+import { eq, and } from 'drizzle-orm'
+import type { Habit, HabitCompletion } from '@/lib/types'
+import type { UserSettings } from '@/components/settings-dialog'
+import { v4 as uuidv4 } from 'uuid'
 
 // Функция для проверки соединения с базой данных перед выполнением запросов
 async function ensureDatabaseConnection() {
   try {
     const isConnected = await checkDatabaseConnection()
     if (!isConnected) {
-      throw new Error("Не удалось подключиться к базе данных. Пожалуйста, проверьте настройки подключения.")
+      throw new Error('Не удалось подключиться к базе данных. Пожалуйста, проверьте настройки подключения.')
     }
   } catch (error) {
-    console.error("Ошибка при проверке соединения с базой данных:", error)
-    throw new Error("Проблема с подключением к базе данных. Пожалуйста, попробуйте позже.")
+    console.error('Ошибка при проверке соединения с базой данных:', error)
+    throw new Error('Проблема с подключением к базе данных. Пожалуйста, попробуйте позже.')
   }
 }
 
@@ -32,8 +32,8 @@ export async function getUserByEmail(email: string) {
     // Возвращаем первого найденного пользователя или null
     return result.length > 0 ? result[0] : null
   } catch (error) {
-    console.error("Ошибка при получении пользователя по email:", error)
-    throw new Error("Не удалось получить пользователя. Пожалуйста, попробуйте позже.")
+    console.error('Ошибка при получении пользователя по email:', error)
+    throw new Error('Не удалось получить пользователя. Пожалуйста, попробуйте позже.')
   }
 }
 
@@ -47,8 +47,8 @@ export async function getUserById(id: string) {
 
     return user
   } catch (error) {
-    console.error("Ошибка при получении пользователя по ID:", error)
-    throw new Error("Не удалось получить пользователя. Пожалуйста, попробуйте позже.")
+    console.error('Ошибка при получении пользователя по ID:', error)
+    throw new Error('Не удалось получить пользователя. Пожалуйста, попробуйте позже.')
   }
 }
 
@@ -69,8 +69,8 @@ export async function createUser(userData: { email: string; name: string; passwo
 
     return user
   } catch (error) {
-    console.error("Ошибка при создании пользователя:", error)
-    throw new Error("Не удалось создать пользователя. Пожалуйста, попробуйте позже.")
+    console.error('Ошибка при создании пользователя:', error)
+    throw new Error('Не удалось создать пользователя. Пожалуйста, попробуйте позже.')
   }
 }
 
@@ -80,17 +80,17 @@ export async function createUserSettings(userId: string) {
 
     await db.insert(userSettings).values({
       userId: userId,
-      theme: "system",
-      primaryColor: "blue",
+      theme: 'system',
+      primaryColor: 'blue',
       enableNotifications: false,
-      notificationTime: "20:00",
+      notificationTime: '20:00',
       showConfetti: true,
       shareProgress: false,
-      reminderFrequency: "daily",
+      reminderFrequency: 'daily',
     })
   } catch (error) {
-    console.error("Ошибка при создании настроек пользователя:", error)
-    throw new Error("Не удалось создать настройки пользователя. Пожалуйста, попробуйте позже.")
+    console.error('Ошибка при создании настроек пользователя:', error)
+    throw new Error('Не удалось создать настройки пользователя. Пожалуйста, попробуйте позже.')
   }
 }
 
@@ -105,13 +105,13 @@ export async function getUserHabits(userId: string): Promise<Habit[]> {
     return result.map((habit) => ({
       id: habit.id,
       name: habit.name,
-      description: habit.description || "",
-      frequency: habit.frequency as "daily" | "weekly" | "monthly",
-      status: habit.status as "useful" | "harmful" | "neutral",
+      description: habit.description || '',
+      frequency: habit.frequency as 'daily' | 'weekly' | 'monthly',
+      status: habit.status as 'useful' | 'harmful' | 'neutral',
       createdAt: habit.createdAt.toISOString(),
     }))
   } catch (error) {
-    console.error("Ошибка при получении привычек пользователя:", error)
+    console.error('Ошибка при получении привычек пользователя:', error)
     return []
   }
 }
@@ -141,7 +141,7 @@ export async function getUserCompletions(userId: string): Promise<HabitCompletio
 
     return allCompletions
   } catch (error) {
-    console.error("Ошибка при получении выполнений привычек:", error)
+    console.error('Ошибка при получении выполнений привычек:', error)
     return []
   }
 }
@@ -158,22 +158,22 @@ export async function getUserSettings(userId: string): Promise<UserSettings | nu
     if (!settings) return null
 
     return {
-      theme: settings.theme as "light" | "dark" | "system",
+      theme: settings.theme as 'light' | 'dark' | 'system',
       primaryColor: settings.primaryColor,
       enableNotifications: settings.enableNotifications,
       notificationTime: settings.notificationTime,
       showConfetti: settings.showConfetti,
       shareProgress: settings.shareProgress,
-      reminderFrequency: settings.reminderFrequency as "daily" | "weekly" | "never",
+      reminderFrequency: settings.reminderFrequency as 'daily' | 'weekly' | 'never',
     }
   } catch (error) {
-    console.error("Ошибка при получении настроек пользователя:", error)
+    console.error('Ошибка при получении настроек пользователя:', error)
     return null
   }
 }
 
 // Сохранение привычки
-export async function saveHabit(habit: Omit<Habit, "id" | "createdAt"> & { userId: string }): Promise<Habit> {
+export async function saveHabit(habit: Omit<Habit, 'id' | 'createdAt'> & { userId: string }): Promise<Habit> {
   try {
     await ensureDatabaseConnection()
 
@@ -191,14 +191,14 @@ export async function saveHabit(habit: Omit<Habit, "id" | "createdAt"> & { userI
     return {
       id: newHabit.id,
       name: newHabit.name,
-      description: newHabit.description || "",
-      frequency: newHabit.frequency as "daily" | "weekly" | "monthly",
-      status: newHabit.status as "useful" | "harmful" | "neutral",
+      description: newHabit.description || '',
+      frequency: newHabit.frequency as 'daily' | 'weekly' | 'monthly',
+      status: newHabit.status as 'useful' | 'harmful' | 'neutral',
       createdAt: newHabit.createdAt.toISOString(),
     }
   } catch (error) {
-    console.error("Ошибка при сохранении привычки:", error)
-    throw new Error("Не удалось сохранить привычку. Пожалуйста, попробуйте позже.")
+    console.error('Ошибка при сохранении привычки:', error)
+    throw new Error('Не удалось сохранить привычку. Пожалуйста, попробуйте позже.')
   }
 }
 
@@ -221,14 +221,14 @@ export async function updateHabit(habit: Habit): Promise<Habit> {
     return {
       id: updatedHabit.id,
       name: updatedHabit.name,
-      description: updatedHabit.description || "",
-      frequency: updatedHabit.frequency as "daily" | "weekly" | "monthly",
-      status: updatedHabit.status as "useful" | "harmful" | "neutral",
+      description: updatedHabit.description || '',
+      frequency: updatedHabit.frequency as 'daily' | 'weekly' | 'monthly',
+      status: updatedHabit.status as 'useful' | 'harmful' | 'neutral',
       createdAt: updatedHabit.createdAt.toISOString(),
     }
   } catch (error) {
-    console.error("Ошибка при обновлении привычки:", error)
-    throw new Error("Не удалось обновить привычку. Пожалуйста, попробуйте позже.")
+    console.error('Ошибка при обновлении привычки:', error)
+    throw new Error('Не удалось обновить привычку. Пожалуйста, попробуйте позже.')
   }
 }
 
@@ -238,8 +238,8 @@ export async function deleteHabit(habitId: string): Promise<void> {
     await ensureDatabaseConnection()
     await db.delete(habits).where(eq(habits.id, habitId))
   } catch (error) {
-    console.error("Ошибка при удалении привычки:", error)
-    throw new Error("Не удалось удалить привычку. Пожалуйста, попробуйте позже.")
+    console.error('Ошибка при удалении привычки:', error)
+    throw new Error('Не удалось удалить привычку. Пожалуйста, попробуйте позже.')
   }
 }
 
@@ -268,8 +268,8 @@ export async function toggleCompletion(habitId: string, date: string, completed:
       completed: true,
     }
   } catch (error) {
-    console.error("Ошибка при переключении статуса выполнения привычки:", error)
-    throw new Error("Не удалось переключить статус выполнения привычки. Пожалуйста, попробуйте позже.")
+    console.error('Ошибка при переключении статуса выполнения привычки:', error)
+    throw new Error('Не удалось переключить статус выполнения привычки. Пожалуйста, попробуйте позже.')
   }
 }
 
@@ -308,8 +308,8 @@ export async function saveUserSettings(userId: string, settings: UserSettings): 
       })
     }
   } catch (error) {
-    console.error("Ошибка при сохранении настроек пользователя:", error)
-    throw new Error("Не удалось сохранить настройки пользователя. Пожалуйста, попробуйте позже.")
+    console.error('Ошибка при сохранении настроек пользователя:', error)
+    throw new Error('Не удалось сохранить настройки пользователя. Пожалуйста, попробуйте позже.')
   }
 }
 
@@ -325,7 +325,7 @@ export async function getUserAchievements(userId: string): Promise<string[]> {
 
     return achievements.map((a) => a.achievementId)
   } catch (error) {
-    console.error("Ошибка при получении достижений пользователя:", error)
+    console.error('Ошибка при получении достижений пользователя:', error)
     return []
   }
 }
@@ -353,8 +353,7 @@ export async function saveUserAchievement(userId: string, achievementId: string)
 
     return true
   } catch (error) {
-    console.error("Ошибка при сохранении достижения пользователя:", error)
+    console.error('Ошибка при сохранении достижения пользователя:', error)
     return false
   }
 }
-

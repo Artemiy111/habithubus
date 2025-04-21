@@ -1,7 +1,7 @@
-"use client"
+'use client'
 
-import { useEffect } from "react"
-import { Check } from "lucide-react"
+import { useEffect } from 'react'
+import { Check } from 'lucide-react'
 
 interface SettingsAppliedIndicatorProps {
   show: boolean
@@ -28,4 +28,3 @@ export function SettingsAppliedIndicator({ show, onHide }: SettingsAppliedIndica
     </div>
   )
 }
-

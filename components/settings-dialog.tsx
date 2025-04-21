@@ -1,8 +1,8 @@
-"use client"
+'use client'
 
-import { useState, useEffect } from "react"
-import { Moon, Sun, Check, Settings } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { useState, useEffect } from 'react'
+import { Moon, Sun, Check, Settings } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
@@ -11,15 +11,15 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { Label } from "@/components/ui/label"
-import { Switch } from "@/components/ui/switch"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { useTheme } from "next-themes"
-import { useToast } from "@/hooks/use-toast"
-import { useThemeContext } from "@/lib/theme-context"
+} from '@/components/ui/dialog'
+import { Label } from '@/components/ui/label'
+import { Switch } from '@/components/ui/switch'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { useTheme } from 'next-themes'
+import { useToast } from '@/hooks/use-toast'
+import { useThemeContext } from '@/lib/theme-context'
 
 interface SettingsDialogProps {
   settings: UserSettings
@@ -27,13 +27,13 @@ interface SettingsDialogProps {
 }
 
 export interface UserSettings {
-  theme: "light" | "dark" | "system"
+  theme: 'light' | 'dark' | 'system'
   primaryColor: string
   enableNotifications: boolean
   notificationTime: string
   showConfetti: boolean
   shareProgress: boolean
-  reminderFrequency: "daily" | "weekly" | "never"
+  reminderFrequency: 'daily' | 'weekly' | 'never'
 }
 
 export default function SettingsDialog({ settings, onSettingsChange }: SettingsDialogProps) {
@@ -64,8 +64,8 @@ export default function SettingsDialog({ settings, onSettingsChange }: SettingsD
     setIsOpen(false)
     // Показываем уведомление
     toast({
-      title: "Настройки сохранены",
-      description: "Ваши предпочтения были обновлены.",
+      title: 'Настройки сохранены',
+      description: 'Ваши предпочтения были обновлены.',
     })
   }
 
@@ -74,11 +74,11 @@ export default function SettingsDialog({ settings, onSettingsChange }: SettingsD
   }
 
   const colorOptions = [
-    { value: "blue", label: "Синий", color: "hsl(221.2, 83.2%, 53.3%)" },
-    { value: "green", label: "Зеленый", color: "hsl(142.1, 76.2%, 36.3%)" },
-    { value: "purple", label: "Фиолетовый", color: "hsl(262.1, 83.3%, 57.8%)" },
-    { value: "red", label: "Красный", color: "hsl(346.8, 77.2%, 49.8%)" },
-    { value: "orange", label: "Оранжевый", color: "hsl(24.6, 95%, 53.1%)" },
+    { value: 'blue', label: 'Синий', color: 'hsl(221.2, 83.2%, 53.3%)' },
+    { value: 'green', label: 'Зеленый', color: 'hsl(142.1, 76.2%, 36.3%)' },
+    { value: 'purple', label: 'Фиолетовый', color: 'hsl(262.1, 83.3%, 57.8%)' },
+    { value: 'red', label: 'Красный', color: 'hsl(346.8, 77.2%, 49.8%)' },
+    { value: 'orange', label: 'Оранжевый', color: 'hsl(24.6, 95%, 53.1%)' },
   ]
 
   return (
@@ -107,7 +107,7 @@ export default function SettingsDialog({ settings, onSettingsChange }: SettingsD
                 <Label>Тема</Label>
                 <RadioGroup
                   value={localSettings.theme}
-                  onValueChange={(value: "light" | "dark" | "system") => updateSetting("theme", value)}
+                  onValueChange={(value: 'light' | 'dark' | 'system') => updateSetting('theme', value)}
                   className="flex space-x-2"
                 >
                   <div className="flex items-center space-x-2">
@@ -136,16 +136,16 @@ export default function SettingsDialog({ settings, onSettingsChange }: SettingsD
                     <button
                       key={color.value}
                       type="button"
-                      onClick={() => updateSetting("primaryColor", color.value)}
+                      onClick={() => updateSetting('primaryColor', color.value)}
                       className={`h-12 w-full rounded-md transition-all flex items-center justify-center ${
                         localSettings.primaryColor === color.value
-                          ? "ring-2 ring-offset-2 ring-offset-background"
-                          : "hover:scale-105"
+                          ? 'ring-2 ring-offset-2 ring-offset-background'
+                          : 'hover:scale-105'
                       }`}
                       style={{
                         backgroundColor: color.color,
-                        color: "white",
-                        boxShadow: "0 2px 4px rgba(0,0,0,0.2)",
+                        color: 'white',
+                        boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
                       }}
                       aria-label={`Установить цвет ${color.label}`}
                     >
@@ -165,7 +165,7 @@ export default function SettingsDialog({ settings, onSettingsChange }: SettingsD
                   <Switch
                     id="show-confetti"
                     checked={localSettings.showConfetti}
-                    onCheckedChange={(checked) => updateSetting("showConfetti", checked)}
+                    onCheckedChange={(checked) => updateSetting('showConfetti', checked)}
                   />
                 </div>
                 <p className="text-xs text-muted-foreground">
@@ -183,7 +183,7 @@ export default function SettingsDialog({ settings, onSettingsChange }: SettingsD
                   <Switch
                     id="enable-notifications"
                     checked={localSettings.enableNotifications}
-                    onCheckedChange={(checked) => updateSetting("enableNotifications", checked)}
+                    onCheckedChange={(checked) => updateSetting('enableNotifications', checked)}
                   />
                 </div>
                 <p className="text-xs text-muted-foreground">Получать напоминания о выполнении привычек</p>
@@ -195,7 +195,7 @@ export default function SettingsDialog({ settings, onSettingsChange }: SettingsD
                     <Label>Частота напоминаний</Label>
                     <RadioGroup
                       value={localSettings.reminderFrequency}
-                      onValueChange={(value: "daily" | "weekly" | "never") => updateSetting("reminderFrequency", value)}
+                      onValueChange={(value: 'daily' | 'weekly' | 'never') => updateSetting('reminderFrequency', value)}
                       className="space-y-1"
                     >
                       <div className="flex items-center space-x-2">
@@ -217,14 +217,14 @@ export default function SettingsDialog({ settings, onSettingsChange }: SettingsD
                     <Label htmlFor="notification-time">Время уведомления</Label>
                     <Select
                       value={localSettings.notificationTime}
-                      onValueChange={(value) => updateSetting("notificationTime", value)}
+                      onValueChange={(value) => updateSetting('notificationTime', value)}
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="Выберите время" />
                       </SelectTrigger>
                       <SelectContent>
                         {Array.from({ length: 24 }).map((_, i) => {
-                          const hour = i.toString().padStart(2, "0")
+                          const hour = i.toString().padStart(2, '0')
                           return (
                             <SelectItem key={hour} value={`${hour}:00`}>
                               {`${hour}:00`}
@@ -247,7 +247,7 @@ export default function SettingsDialog({ settings, onSettingsChange }: SettingsD
                   <Switch
                     id="share-progress"
                     checked={localSettings.shareProgress}
-                    onCheckedChange={(checked) => updateSetting("shareProgress", checked)}
+                    onCheckedChange={(checked) => updateSetting('shareProgress', checked)}
                   />
                 </div>
                 <p className="text-xs text-muted-foreground">Разрешить делиться прогрессом с друзьями и семьей</p>
@@ -266,4 +266,3 @@ export default function SettingsDialog({ settings, onSettingsChange }: SettingsD
     </Dialog>
   )
 }
-

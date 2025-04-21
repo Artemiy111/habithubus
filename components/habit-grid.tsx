@@ -1,14 +1,14 @@
-"use client"
+'use client'
 
-import { useState } from "react"
-import { ChevronLeft, ChevronRight, Calendar, Leaf, AlertTriangle, Minus, Grid, LayoutGrid } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Badge } from "@/components/ui/badge"
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import type { Habit, HabitCompletion } from "@/lib/types"
-import { cn } from "@/lib/utils"
+import { useState } from 'react'
+import { ChevronLeft, ChevronRight, Calendar, Leaf, AlertTriangle, Minus, Grid, LayoutGrid } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Badge } from '@/components/ui/badge'
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import type { Habit, HabitCompletion } from '@/lib/types'
+import { cn } from '@/lib/utils'
 
 interface HabitGridProps {
   habits: Habit[]
@@ -19,7 +19,7 @@ interface HabitGridProps {
 export default function HabitGrid({ habits, completions, onToggleCompletion }: HabitGridProps) {
   const [selectedHabitId, setSelectedHabitId] = useState<string | null>(habits.length > 0 ? habits[0].id : null)
   const [currentDate, setCurrentDate] = useState(new Date())
-  const [viewMode, setViewMode] = useState<"grid" | "calendar">("grid")
+  const [viewMode, setViewMode] = useState<'grid' | 'calendar'>('grid')
 
   // Generate dates for the grid (similar to GitHub contribution grid)
   const generateDates = () => {
@@ -46,7 +46,7 @@ export default function HabitGrid({ habits, completions, onToggleCompletion }: H
 
   // Format date as YYYY-MM-DD for comparison with completions
   const formatDateString = (date: Date) => {
-    return date.toISOString().split("T")[0]
+    return date.toISOString().split('T')[0]
   }
 
   // Check if a habit was completed on a specific date
@@ -73,9 +73,9 @@ export default function HabitGrid({ habits, completions, onToggleCompletion }: H
   }
 
   // Get month name and year
-  const monthYear = currentDate.toLocaleDateString("ru-RU", {
-    month: "long",
-    year: "numeric",
+  const monthYear = currentDate.toLocaleDateString('ru-RU', {
+    month: 'long',
+    year: 'numeric',
   })
 
   // Handle cell click to toggle completion
@@ -88,11 +88,11 @@ export default function HabitGrid({ habits, completions, onToggleCompletion }: H
   // Get status icon
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "useful":
+      case 'useful':
         return <Leaf className="h-4 w-4 text-green-500" />
-      case "harmful":
+      case 'harmful':
         return <AlertTriangle className="h-4 w-4 text-red-500" />
-      case "neutral":
+      case 'neutral':
       default:
         return <Minus className="h-4 w-4 text-gray-500" />
     }
@@ -100,16 +100,16 @@ export default function HabitGrid({ habits, completions, onToggleCompletion }: H
 
   // Get completion color based on habit status
   const getCompletionColor = (habit: Habit, completed: boolean) => {
-    if (!completed) return "bg-muted hover:bg-muted/80"
+    if (!completed) return 'bg-muted hover:bg-muted/80'
 
     switch (habit.status) {
-      case "useful":
-        return "bg-green-600 text-white hover:bg-green-700"
-      case "harmful":
-        return "bg-red-600 text-white hover:bg-red-700"
-      case "neutral":
+      case 'useful':
+        return 'bg-green-600 text-white hover:bg-green-700'
+      case 'harmful':
+        return 'bg-red-600 text-white hover:bg-red-700'
+      case 'neutral':
       default:
-        return "bg-gray-600 text-white hover:bg-gray-700"
+        return 'bg-gray-600 text-white hover:bg-gray-700'
     }
   }
 
@@ -166,7 +166,7 @@ export default function HabitGrid({ habits, completions, onToggleCompletion }: H
           <div className="flex items-center gap-2">
             <CardTitle>Сетка привычек</CardTitle>
             <div className="ml-4">
-              <Tabs value={viewMode} onValueChange={(value) => setViewMode(value as "grid" | "calendar")}>
+              <Tabs value={viewMode} onValueChange={(value) => setViewMode(value as 'grid' | 'calendar')}>
                 <TabsList>
                   <TabsTrigger value="grid" className="flex items-center gap-1">
                     <Grid className="h-4 w-4" />
@@ -196,7 +196,7 @@ export default function HabitGrid({ habits, completions, onToggleCompletion }: H
       </CardHeader>
       <CardContent>
         <div className="mb-4">
-          <Select value={selectedHabitId || ""} onValueChange={(value) => setSelectedHabitId(value)}>
+          <Select value={selectedHabitId || ''} onValueChange={(value) => setSelectedHabitId(value)}>
             <SelectTrigger>
               <SelectValue placeholder="Выберите привычку для просмотра" />
             </SelectTrigger>
@@ -221,51 +221,51 @@ export default function HabitGrid({ habits, completions, onToggleCompletion }: H
                 <Badge
                   variant="outline"
                   className={cn(
-                    "flex items-center gap-1",
-                    selectedHabit.status === "useful"
-                      ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
-                      : selectedHabit.status === "harmful"
-                        ? "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"
-                        : "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300",
+                    'flex items-center gap-1',
+                    selectedHabit.status === 'useful'
+                      ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
+                      : selectedHabit.status === 'harmful'
+                        ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'
+                        : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300',
                   )}
                 >
                   {getStatusIcon(selectedHabit.status)}
                   <span>
-                    {selectedHabit.status === "useful"
-                      ? "Полезная"
-                      : selectedHabit.status === "harmful"
-                        ? "Вредная"
-                        : "Нейтральная"}
+                    {selectedHabit.status === 'useful'
+                      ? 'Полезная'
+                      : selectedHabit.status === 'harmful'
+                        ? 'Вредная'
+                        : 'Нейтральная'}
                   </span>
                 </Badge>
               </div>
               {selectedHabit.description && <p className="text-muted-foreground mt-1">{selectedHabit.description}</p>}
               <p className="text-xs text-muted-foreground mt-1">
-                Частота:{" "}
-                {selectedHabit.frequency === "daily"
-                  ? "Ежедневно"
-                  : selectedHabit.frequency === "weekly"
-                    ? "Еженедельно"
-                    : "Ежемесячно"}
+                Частота:{' '}
+                {selectedHabit.frequency === 'daily'
+                  ? 'Ежедневно'
+                  : selectedHabit.frequency === 'weekly'
+                    ? 'Еженедельно'
+                    : 'Ежемесячно'}
               </p>
             </div>
 
-            {viewMode === "grid" ? (
+            {viewMode === 'grid' ? (
               // Grid View (Original)
               <div className="grid grid-cols-7 gap-1 mt-4">
                 {/* Day labels */}
-                {["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"].map((day) => (
+                {['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'].map((day) => (
                   <div key={day} className="text-xs text-center font-medium">
                     {day}
                   </div>
                 ))}
 
                 {/* Empty cells for alignment */}
-                {Array.from({ length: new Date(dates[0].getFullYear(), dates[0].getMonth(), 1).getDay() || 7 }).map(
-                  (_, i) => (
-                    <div key={`empty-${i}`} className="h-8 rounded-md"></div>
-                  ),
-                )}
+                {Array.from({
+                  length: new Date(dates[0].getFullYear(), dates[0].getMonth(), 1).getDay() || 7,
+                }).map((_, i) => (
+                  <div key={`empty-${i}`} className="h-8 rounded-md"></div>
+                ))}
 
                 {/* Date cells */}
                 {dates.map((date) => {
@@ -275,10 +275,10 @@ export default function HabitGrid({ habits, completions, onToggleCompletion }: H
                       key={date.toISOString()}
                       onClick={() => handleCellClick(date)}
                       className={cn(
-                        "h-8 rounded-md flex items-center justify-center text-xs transition-colors",
+                        'h-8 rounded-md flex items-center justify-center text-xs transition-colors',
                         getCompletionColor(selectedHabit, completed),
                       )}
-                      title={`${date.toLocaleDateString()} - ${completed ? "Выполнено" : "Не выполнено"}`}
+                      title={`${date.toLocaleDateString()} - ${completed ? 'Выполнено' : 'Не выполнено'}`}
                     >
                       {date.getDate()}
                     </button>
@@ -289,7 +289,7 @@ export default function HabitGrid({ habits, completions, onToggleCompletion }: H
               // Calendar View (New)
               <div className="mt-4 border rounded-lg overflow-hidden">
                 <div className="grid grid-cols-7 bg-muted">
-                  {["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"].map((day) => (
+                  {['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'].map((day) => (
                     <div key={day} className="text-xs text-center font-medium py-2">
                       {day}
                     </div>
@@ -306,16 +306,16 @@ export default function HabitGrid({ habits, completions, onToggleCompletion }: H
                             key={`day-${weekIndex}-${dayIndex}`}
                             onClick={() => handleCellClick(day.date)}
                             className={cn(
-                              "h-16 p-1 flex flex-col items-start justify-start transition-colors relative",
-                              !day.isCurrentMonth && "opacity-40 bg-muted/30",
+                              'h-16 p-1 flex flex-col items-start justify-start transition-colors relative',
+                              !day.isCurrentMonth && 'opacity-40 bg-muted/30',
                               day.isCurrentMonth && completed && getCompletionColor(selectedHabit, completed),
                             )}
-                            title={`${day.date.toLocaleDateString()} - ${completed ? "Выполнено" : "Не выполнено"}`}
+                            title={`${day.date.toLocaleDateString()} - ${completed ? 'Выполнено' : 'Не выполнено'}`}
                           >
                             <span
                               className={cn(
-                                "text-xs font-medium rounded-full w-5 h-5 flex items-center justify-center",
-                                day.isCurrentMonth && completed ? "text-white" : "text-foreground",
+                                'text-xs font-medium rounded-full w-5 h-5 flex items-center justify-center',
+                                day.isCurrentMonth && completed ? 'text-white' : 'text-foreground',
                               )}
                             >
                               {day.date.getDate()}
@@ -341,12 +341,12 @@ export default function HabitGrid({ habits, completions, onToggleCompletion }: H
               <div className="flex items-center">
                 <div
                   className={cn(
-                    "w-3 h-3 rounded-sm mr-1",
-                    selectedHabit.status === "useful"
-                      ? "bg-green-600"
-                      : selectedHabit.status === "harmful"
-                        ? "bg-red-600"
-                        : "bg-gray-600",
+                    'w-3 h-3 rounded-sm mr-1',
+                    selectedHabit.status === 'useful'
+                      ? 'bg-green-600'
+                      : selectedHabit.status === 'harmful'
+                        ? 'bg-red-600'
+                        : 'bg-gray-600',
                   )}
                 ></div>
                 <span>Выполнено</span>
@@ -355,11 +355,10 @@ export default function HabitGrid({ habits, completions, onToggleCompletion }: H
           </>
         ) : (
           <div className="text-center py-8 text-muted-foreground">
-            {habits.length === 0 ? "Добавьте привычку, чтобы начать" : "Выберите привычку для просмотра"}
+            {habits.length === 0 ? 'Добавьте привычку, чтобы начать' : 'Выберите привычку для просмотра'}
           </div>
         )}
       </CardContent>
     </Card>
   )
 }
-

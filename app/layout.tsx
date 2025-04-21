@@ -1,17 +1,17 @@
-import type React from "react"
-import type { Metadata } from "next"
-import { Inter } from "next/font/google"
-import "./globals.css"
-import { ThemeProvider as NextThemesProvider } from "next-themes"
-import { ThemeProvider } from "@/lib/theme-context"
-import { Toaster } from "@/components/ui/toaster"
+import type React from 'react'
+import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
+import './globals.css'
+import { ThemeProvider as NextThemesProvider } from 'next-themes'
+import { ThemeProvider } from '@/lib/theme-context'
+import { Toaster } from '@/components/ui/toaster'
 
-const inter = Inter({ subsets: ["latin"] })
+const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: "Habit Tracker",
-  description: "Track and manage your daily habits",
-    generator: 'v0.dev'
+  title: 'Habit Tracker',
+  description: 'Track and manage your daily habits',
+  generator: 'v0.dev',
 }
 
 export default function RootLayout({
@@ -38,4 +38,3 @@ export default function RootLayout({
     </html>
   )
 }
-

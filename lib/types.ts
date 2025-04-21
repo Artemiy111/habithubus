@@ -1,10 +1,10 @@
-import type React from "react"
+import type React from 'react'
 export interface Habit {
   id: string
   name: string
   description: string
-  frequency: "daily" | "weekly" | "monthly"
-  status: "useful" | "harmful" | "neutral"
+  frequency: 'daily' | 'weekly' | 'monthly'
+  status: 'useful' | 'harmful' | 'neutral'
   createdAt: string
 }
 
@@ -21,13 +21,13 @@ export interface User {
 }
 
 export interface UserSettings {
-  theme: "light" | "dark" | "system"
+  theme: 'light' | 'dark' | 'system'
   primaryColor: string
   enableNotifications: boolean
   notificationTime: string
   showConfetti: boolean
   shareProgress: boolean
-  reminderFrequency: "daily" | "weekly" | "never"
+  reminderFrequency: 'daily' | 'weekly' | 'never'
 }
 
 export interface Achievement {
@@ -40,4 +40,3 @@ export interface Achievement {
   unlocked: boolean
   points: number
 }
-

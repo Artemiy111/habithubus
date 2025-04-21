@@ -1,15 +1,15 @@
-"use client"
+'use client'
 
-import { useState } from "react"
-import { Edit, Trash2, Check, X, ChevronDown, ChevronUp, Leaf, AlertTriangle, Minus } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible"
-import { Badge } from "@/components/ui/badge"
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import HabitForm from "@/components/habit-form"
-import type { Habit, HabitCompletion } from "@/lib/types"
-import { cn } from "@/lib/utils"
+import { useState } from 'react'
+import { Edit, Trash2, Check, X, ChevronDown, ChevronUp, Leaf, AlertTriangle, Minus } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Collapsible, CollapsibleContent } from '@/components/ui/collapsible'
+import { Badge } from '@/components/ui/badge'
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import HabitForm from '@/components/habit-form'
+import type { Habit, HabitCompletion } from '@/lib/types'
+import { cn } from '@/lib/utils'
 
 interface HabitListProps {
   habits: Habit[]
@@ -26,7 +26,7 @@ export default function HabitList({ habits, completions, onToggleCompletion, onE
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
 
   // Get today's date in YYYY-MM-DD format
-  const today = new Date().toISOString().split("T")[0]
+  const today = new Date().toISOString().split('T')[0]
 
   // Check if a habit was completed today
   const isCompletedToday = (habitId: string) => {
@@ -44,7 +44,7 @@ export default function HabitList({ habits, completions, onToggleCompletion, onE
     for (let i = 0; i < 7; i++) {
       const date = new Date()
       date.setDate(date.getDate() - i)
-      dates.push(date.toISOString().split("T")[0])
+      dates.push(date.toISOString().split('T')[0])
     }
     return dates
   }
@@ -59,7 +59,11 @@ export default function HabitList({ habits, completions, onToggleCompletion, onE
   // Format date for display
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
-    return date.toLocaleDateString("ru-RU", { weekday: "short", month: "short", day: "numeric" })
+    return date.toLocaleDateString('ru-RU', {
+      weekday: 'short',
+      month: 'short',
+      day: 'numeric',
+    })
   }
 
   // Toggle expansion of a habit's details
@@ -74,21 +78,21 @@ export default function HabitList({ habits, completions, onToggleCompletion, onE
   // Get status icon and color
   const getStatusInfo = (status: string) => {
     switch (status) {
-      case "useful":
+      case 'useful':
         return {
           icon: <Leaf className="h-4 w-4" />,
-          color: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
+          color: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
         }
-      case "harmful":
+      case 'harmful':
         return {
           icon: <AlertTriangle className="h-4 w-4" />,
-          color: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300",
+          color: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300',
         }
-      case "neutral":
+      case 'neutral':
       default:
         return {
           icon: <Minus className="h-4 w-4" />,
-          color: "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300",
+          color: 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300',
         }
     }
   }
@@ -123,9 +127,9 @@ export default function HabitList({ habits, completions, onToggleCompletion, onE
                 <Collapsible key={habit.id} open={expandedHabitId === habit.id} className="border rounded-lg">
                   <div className="flex items-center p-4">
                     <Button
-                      variant={isCompletedToday(habit.id) ? "default" : "outline"}
+                      variant={isCompletedToday(habit.id) ? 'default' : 'outline'}
                       size="icon"
-                      className={cn("mr-3 h-8 w-8", isCompletedToday(habit.id) && "bg-green-600 hover:bg-green-700")}
+                      className={cn('mr-3 h-8 w-8', isCompletedToday(habit.id) && 'bg-green-600 hover:bg-green-700')}
                       onClick={() => toggleTodayCompletion(habit.id)}
                     >
                       {isCompletedToday(habit.id) ? <Check className="h-4 w-4" /> : <X className="h-4 w-4" />}
@@ -134,23 +138,23 @@ export default function HabitList({ habits, completions, onToggleCompletion, onE
                     <div className="flex-1">
                       <div className="flex items-center gap-2">
                         <h3 className="font-medium">{habit.name}</h3>
-                        <Badge variant="outline" className={cn("flex items-center gap-1", statusInfo.color)}>
+                        <Badge variant="outline" className={cn('flex items-center gap-1', statusInfo.color)}>
                           {statusInfo.icon}
                           <span>
-                            {habit.status === "useful"
-                              ? "Полезная"
-                              : habit.status === "harmful"
-                                ? "Вредная"
-                                : "Нейтральная"}
+                            {habit.status === 'useful'
+                              ? 'Полезная'
+                              : habit.status === 'harmful'
+                                ? 'Вредная'
+                                : 'Нейтральная'}
                           </span>
                         </Badge>
                       </div>
                       <p className="text-xs text-muted-foreground">
-                        {habit.frequency === "daily"
-                          ? "Ежедневно"
-                          : habit.frequency === "weekly"
-                            ? "Еженедельно"
-                            : "Ежемесячно"}
+                        {habit.frequency === 'daily'
+                          ? 'Ежедневно'
+                          : habit.frequency === 'weekly'
+                            ? 'Еженедельно'
+                            : 'Ежемесячно'}
                       </p>
                     </div>
 
@@ -185,10 +189,10 @@ export default function HabitList({ habits, completions, onToggleCompletion, onE
                                 key={date}
                                 onClick={() => onToggleCompletion(habit.id, date)}
                                 className={cn(
-                                  "flex flex-col items-center justify-center rounded-md p-2 text-xs transition-colors",
+                                  'flex flex-col items-center justify-center rounded-md p-2 text-xs transition-colors',
                                   completed
-                                    ? "bg-green-600 text-white hover:bg-green-700"
-                                    : "bg-muted hover:bg-muted/80",
+                                    ? 'bg-green-600 text-white hover:bg-green-700'
+                                    : 'bg-muted hover:bg-muted/80',
                                 )}
                               >
                                 <span>{formatDate(date)}</span>
@@ -228,4 +232,3 @@ export default function HabitList({ habits, completions, onToggleCompletion, onE
     </Card>
   )
 }
-

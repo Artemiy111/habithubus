@@ -1,15 +1,15 @@
-"use client"
+'use client'
 
-import { useState, useEffect } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
-import Link from "next/link"
-import { login } from "@/lib/auth/actions"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import GitHubButton from "./github-button"
+import { useState, useEffect } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import Link from 'next/link'
+import { login } from '@/lib/auth/actions'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { Alert, AlertDescription } from '@/components/ui/alert'
+import GitHubButton from './github-button'
 
 export default function LoginForm() {
   const [error, setError] = useState<string | null>(null)
@@ -20,35 +20,35 @@ export default function LoginForm() {
 
   useEffect(() => {
     // Проверяем, пришел ли пользователь после успешной регистрации
-    const registered = searchParams.get("registered")
-    if (registered === "true") {
-      setSuccess("Регистрация успешна! Теперь вы можете войти.")
+    const registered = searchParams.get('registered')
+    if (registered === 'true') {
+      setSuccess('Регистрация успешна! Теперь вы можете войти.')
     }
 
     // Проверяем ошибки OAuth
-    const error = searchParams.get("error")
+    const error = searchParams.get('error')
     if (error) {
       switch (error) {
-        case "github_auth_error":
-          setError("Ошибка при авторизации через GitHub. Пожалуйста, попробуйте снова.")
+        case 'github_auth_error':
+          setError('Ошибка при авторизации через GitHub. Пожалуйста, попробуйте снова.')
           break
-        case "invalid_state":
-          setError("Недействительный запрос авторизации. Пожалуйста, попробуйте снова.")
+        case 'invalid_state':
+          setError('Недействительный запрос авторизации. Пожалуйста, попробуйте снова.')
           break
-        case "no_code":
-          setError("Не получен код авторизации от GitHub. Пожалуйста, попробуйте снова.")
+        case 'no_code':
+          setError('Не получен код авторизации от GitHub. Пожалуйста, попробуйте снова.')
           break
-        case "token_error":
-          setError("Ошибка при получении токена доступа. Пожалуйста, попробуйте снова.")
+        case 'token_error':
+          setError('Ошибка при получении токена доступа. Пожалуйста, попробуйте снова.')
           break
-        case "user_error":
-          setError("Ошибка при получении данных пользователя. Пожалуйста, попробуйте снова.")
+        case 'user_error':
+          setError('Ошибка при получении данных пользователя. Пожалуйста, попробуйте снова.')
           break
-        case "email_error":
-          setError("Не удалось получить email пользователя. Пожалуйста, убедитесь, что ваш email в GitHub публичный.")
+        case 'email_error':
+          setError('Не удалось получить email пользователя. Пожалуйста, убедитесь, что ваш email в GitHub публичный.')
           break
         default:
-          setError("Произошла ошибка при входе. Пожалуйста, попробуйте снова.")
+          setError('Произошла ошибка при входе. Пожалуйста, попробуйте снова.')
       }
     }
   }, [searchParams])
@@ -63,7 +63,7 @@ export default function LoginForm() {
 
       if (result) {
         if (result.success && result.redirectUrl) {
-          console.log("Login successful, redirecting to:", result.redirectUrl)
+          console.log('Login successful, redirecting to:', result.redirectUrl)
           router.push(result.redirectUrl)
           // Добавляем небольшую задержку перед перенаправлением
           setTimeout(() => {
@@ -75,8 +75,8 @@ export default function LoginForm() {
         }
       }
     } catch (error) {
-      console.error("Error during login:", error)
-      setError("Произошла ошибка при входе. Пожалуйста, попробуйте снова.")
+      console.error('Error during login:', error)
+      setError('Произошла ошибка при входе. Пожалуйста, попробуйте снова.')
       setIsLoading(false)
     }
   }
@@ -123,13 +123,13 @@ export default function LoginForm() {
           </div>
 
           <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading ? "Вход..." : "Войти"}
+            {isLoading ? 'Вход...' : 'Войти'}
           </Button>
         </form>
       </CardContent>
       <CardFooter className="flex justify-center">
         <p className="text-sm text-muted-foreground">
-          Нет аккаунта?{" "}
+          Нет аккаунта?{' '}
           <Link href="/register" className="text-primary hover:underline">
             Зарегистрироваться
           </Link>
@@ -138,4 +138,3 @@ export default function LoginForm() {
     </Card>
   )
 }
-

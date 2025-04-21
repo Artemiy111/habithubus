@@ -1,8 +1,8 @@
-"use client"
+'use client'
 
-import { useState } from "react"
-import { Plus } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { useState } from 'react'
+import { Plus } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
@@ -10,11 +10,11 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import HabitForm from "@/components/habit-form"
-import { saveHabit } from "@/lib/db/actions"
-import type { Habit } from "@/lib/types"
-import { useToast } from "@/hooks/use-toast"
+} from '@/components/ui/dialog'
+import HabitForm from '@/components/habit-form'
+import { saveHabit } from '@/lib/db/actions'
+import type { Habit } from '@/lib/types'
+import { useToast } from '@/hooks/use-toast'
 
 interface HabitFormDialogProps {
   userId: string
@@ -37,19 +37,19 @@ export default function HabitFormDialog({ userId }: HabitFormDialogProps) {
       setIsSubmitting(false)
 
       toast({
-        title: "Привычка добавлена",
-        description: "Ваша новая привычка была успешно добавлена.",
+        title: 'Привычка добавлена',
+        description: 'Ваша новая привычка была успешно добавлена.',
       })
 
       // Используем window.location.href вместо reload для предотвращения ошибки гидрации
       window.location.href = window.location.pathname
     } catch (error) {
-      console.error("Ошибка при добавлении привычки:", error)
+      console.error('Ошибка при добавлении привычки:', error)
       setIsSubmitting(false)
       toast({
-        title: "Ошибка",
-        description: "Не удалось добавить привычку. Пожалуйста, попробуйте снова.",
-        variant: "destructive",
+        title: 'Ошибка',
+        description: 'Не удалось добавить привычку. Пожалуйста, попробуйте снова.',
+        variant: 'destructive',
       })
     }
   }
@@ -79,4 +79,3 @@ export default function HabitFormDialog({ userId }: HabitFormDialogProps) {
     </Dialog>
   )
 }
-

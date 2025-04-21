@@ -1,11 +1,11 @@
-"use client"
+'use client'
 
-import { useMemo } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Leaf, AlertTriangle, Minus } from "lucide-react"
-import type { Habit, HabitCompletion } from "@/lib/types"
+import { useMemo } from 'react'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Progress } from '@/components/ui/progress'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Leaf, AlertTriangle, Minus } from 'lucide-react'
+import type { Habit, HabitCompletion } from '@/lib/types'
 import {
   BarChart,
   Bar,
@@ -18,7 +18,7 @@ import {
   Pie,
   Cell,
   Legend,
-} from "recharts"
+} from 'recharts'
 
 interface HabitStatsProps {
   habits: Habit[]
@@ -39,12 +39,12 @@ export default function HabitStats({ habits, completions }: HabitStatsProps) {
       let possibleDays = 0
       let possibleWeeks = 0
 
-      if (habit.frequency === "daily") {
+      if (habit.frequency === 'daily') {
         possibleDays = 30
-      } else if (habit.frequency === "weekly") {
+      } else if (habit.frequency === 'weekly') {
         possibleWeeks = 4 // Approximately 4 weeks in 30 days
         possibleDays = possibleWeeks * 7
-      } else if (habit.frequency === "monthly") {
+      } else if (habit.frequency === 'monthly') {
         possibleDays = 1
       }
 
@@ -60,7 +60,7 @@ export default function HabitStats({ habits, completions }: HabitStatsProps) {
       let weeksWithCompletions = 0
       let completionRate = 0
 
-      if (habit.frequency === "weekly") {
+      if (habit.frequency === 'weekly') {
         // Group completions by week
         const weekMap = new Map()
 
@@ -69,7 +69,7 @@ export default function HabitStats({ habits, completions }: HabitStatsProps) {
           const weekStart = new Date(thirtyDaysAgo)
           weekStart.setDate(weekStart.getDate() + i * 7)
           const weekKey =
-            weekStart.toISOString().split("T")[0].substring(0, 7) + "-W" + Math.ceil(weekStart.getDate() / 7)
+            weekStart.toISOString().split('T')[0].substring(0, 7) + '-W' + Math.ceil(weekStart.getDate() / 7)
           weekMap.set(weekKey, false)
         }
 
@@ -77,7 +77,7 @@ export default function HabitStats({ habits, completions }: HabitStatsProps) {
         habitCompletions.forEach((completion) => {
           const completionDate = new Date(completion.date)
           const weekNumber = Math.ceil(completionDate.getDate() / 7)
-          const weekKey = completionDate.toISOString().split("T")[0].substring(0, 7) + "-W" + weekNumber
+          const weekKey = completionDate.toISOString().split('T')[0].substring(0, 7) + '-W' + weekNumber
           weekMap.set(weekKey, true)
         })
 
@@ -100,7 +100,7 @@ export default function HabitStats({ habits, completions }: HabitStatsProps) {
         weeksWithCompletions,
         completionRate,
         frequency: habit.frequency,
-        status: habit.status || "useful",
+        status: habit.status || 'useful',
       }
     })
   }, [habits, completions])
@@ -116,7 +116,7 @@ export default function HabitStats({ habits, completions }: HabitStatsProps) {
     let totalCompleted = 0
 
     last30DaysStats.forEach((stat) => {
-      if (stat.frequency === "weekly") {
+      if (stat.frequency === 'weekly') {
         totalPossible += stat.possibleWeeks
         totalCompleted += stat.weeksWithCompletions
       } else {
@@ -138,8 +138,8 @@ export default function HabitStats({ habits, completions }: HabitStatsProps) {
       const date = new Date()
       date.setDate(date.getDate() - i)
       last7Days.push({
-        date: date.toISOString().split("T")[0],
-        displayDate: date.toLocaleDateString("ru-RU", { weekday: "short" }),
+        date: date.toISOString().split('T')[0],
+        displayDate: date.toLocaleDateString('ru-RU', { weekday: 'short' }),
       })
     }
 
@@ -163,9 +163,9 @@ export default function HabitStats({ habits, completions }: HabitStatsProps) {
   // Group habits by status
   const habitsByStatus = useMemo(() => {
     const grouped = {
-      useful: habits.filter((h) => h.status === "useful"),
-      harmful: habits.filter((h) => h.status === "harmful"),
-      neutral: habits.filter((h) => h.status === "neutral"),
+      useful: habits.filter((h) => h.status === 'useful'),
+      harmful: habits.filter((h) => h.status === 'harmful'),
+      neutral: habits.filter((h) => h.status === 'neutral'),
     }
 
     return grouped
@@ -187,10 +187,14 @@ export default function HabitStats({ habits, completions }: HabitStatsProps) {
 
     // Фильтруем категории с нулевыми значениями
     const pieChartData = [
-      { name: "Полезные", value: statusCompletions.useful, color: "#22c55e" },
-      { name: "Вредные", value: statusCompletions.harmful, color: "#ef4444" },
-      { name: "Нейтральные", value: statusCompletions.neutral, color: "#6b7280" },
-    ].filter((item) => item.value > 0 || (item.name === "Полезные" && habitsByStatus.useful.length > 0))
+      { name: 'Полезные', value: statusCompletions.useful, color: '#22c55e' },
+      { name: 'Вредные', value: statusCompletions.harmful, color: '#ef4444' },
+      {
+        name: 'Нейтральные',
+        value: statusCompletions.neutral,
+        color: '#6b7280',
+      },
+    ].filter((item) => item.value > 0 || (item.name === 'Полезные' && habitsByStatus.useful.length > 0))
 
     return { habitIds, statusCompletions, pieChartData }
   }, [habitsByStatus, completions])
@@ -198,9 +202,9 @@ export default function HabitStats({ habits, completions }: HabitStatsProps) {
   // Get stats for each status category
   const statsByStatus = useMemo(() => {
     return {
-      useful: last30DaysStats.filter((stat) => stat.status === "useful"),
-      harmful: last30DaysStats.filter((stat) => stat.status === "harmful"),
-      neutral: last30DaysStats.filter((stat) => stat.status === "neutral"),
+      useful: last30DaysStats.filter((stat) => stat.status === 'useful'),
+      harmful: last30DaysStats.filter((stat) => stat.status === 'harmful'),
+      neutral: last30DaysStats.filter((stat) => stat.status === 'neutral'),
     }
   }, [last30DaysStats])
 
@@ -289,7 +293,7 @@ export default function HabitStats({ habits, completions }: HabitStatsProps) {
                     <Cell key={`cell-${index}`} fill={entry.color} />
                   ))}
                 </Pie>
-                <Tooltip formatter={(value) => [`${value} выполнений`, "Количество"]} />
+                <Tooltip formatter={(value) => [`${value} выполнений`, 'Количество']} />
                 <Legend />
               </PieChart>
             </ResponsiveContainer>
@@ -350,13 +354,13 @@ export default function HabitStats({ habits, completions }: HabitStatsProps) {
                     </div>
                     <Progress value={stat.completionRate} className="h-2" />
                     <div className="text-xs text-muted-foreground">
-                      {stat.frequency === "weekly" ? (
+                      {stat.frequency === 'weekly' ? (
                         <>
                           {stat.weeksWithCompletions} из {stat.possibleWeeks} недель. {stat.completionCount} раз
                         </>
                       ) : (
                         <>
-                          {stat.completionCount} из {stat.possibleDays} {stat.possibleDays === 1 ? "дня" : "дней"}{" "}
+                          {stat.completionCount} из {stat.possibleDays} {stat.possibleDays === 1 ? 'дня' : 'дней'}{' '}
                           выполнено
                         </>
                       )}
@@ -377,13 +381,13 @@ export default function HabitStats({ habits, completions }: HabitStatsProps) {
                       </div>
                       <Progress value={stat.completionRate} className="h-2" />
                       <div className="text-xs text-muted-foreground">
-                        {stat.frequency === "weekly" ? (
+                        {stat.frequency === 'weekly' ? (
                           <>
                             {stat.weeksWithCompletions} из {stat.possibleWeeks} недель. {stat.completionCount} раз
                           </>
                         ) : (
                           <>
-                            {stat.completionCount} из {stat.possibleDays} {stat.possibleDays === 1 ? "дня" : "дней"}{" "}
+                            {stat.completionCount} из {stat.possibleDays} {stat.possibleDays === 1 ? 'дня' : 'дней'}{' '}
                             выполнено
                           </>
                         )}
@@ -405,13 +409,13 @@ export default function HabitStats({ habits, completions }: HabitStatsProps) {
                       </div>
                       <Progress value={stat.completionRate} className="h-2" />
                       <div className="text-xs text-muted-foreground">
-                        {stat.frequency === "weekly" ? (
+                        {stat.frequency === 'weekly' ? (
                           <>
                             {stat.weeksWithCompletions} из {stat.possibleWeeks} недель. {stat.completionCount} раз
                           </>
                         ) : (
                           <>
-                            {stat.completionCount} из {stat.possibleDays} {stat.possibleDays === 1 ? "дня" : "дней"}{" "}
+                            {stat.completionCount} из {stat.possibleDays} {stat.possibleDays === 1 ? 'дня' : 'дней'}{' '}
                             выполнено
                           </>
                         )}
@@ -435,13 +439,13 @@ export default function HabitStats({ habits, completions }: HabitStatsProps) {
                       </div>
                       <Progress value={stat.completionRate} className="h-2" />
                       <div className="text-xs text-muted-foreground">
-                        {stat.frequency === "weekly" ? (
+                        {stat.frequency === 'weekly' ? (
                           <>
                             {stat.weeksWithCompletions} из {stat.possibleWeeks} недель. {stat.completionCount} раз
                           </>
                         ) : (
                           <>
-                            {stat.completionCount} из {stat.possibleDays} {stat.possibleDays === 1 ? "дня" : "дней"}{" "}
+                            {stat.completionCount} из {stat.possibleDays} {stat.possibleDays === 1 ? 'дня' : 'дней'}{' '}
                             выполнено
                           </>
                         )}
@@ -457,4 +461,3 @@ export default function HabitStats({ habits, completions }: HabitStatsProps) {
     </div>
   )
 }
-

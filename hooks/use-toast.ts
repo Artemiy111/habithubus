@@ -1,21 +1,21 @@
-"use client"
+'use client'
 
-import type React from "react"
+import type React from 'react'
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback } from 'react'
 
 type ToastProps = {
   id: string
   title?: string
   description?: string
   action?: React.ReactNode
-  variant?: "default" | "destructive"
+  variant?: 'default' | 'destructive'
 }
 
 export function useToast() {
   const [toasts, setToasts] = useState<ToastProps[]>([])
 
-  const toast = useCallback(({ title, description, action, variant }: Omit<ToastProps, "id">) => {
+  const toast = useCallback(({ title, description, action, variant }: Omit<ToastProps, 'id'>) => {
     const id = Math.random().toString(36).substring(2, 9)
     const newToast = { id, title, description, action, variant }
     setToasts((toasts) => [...toasts, newToast])
@@ -39,4 +39,3 @@ export function useToast() {
 
   return { toast, dismiss, toasts }
 }
-

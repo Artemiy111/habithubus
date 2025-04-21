@@ -1,17 +1,17 @@
-"use client"
+'use client'
 
-import type React from "react"
+import type React from 'react'
 
-import { useState, useEffect } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Leaf, AlertTriangle, Minus } from "lucide-react"
-import type { Habit } from "@/lib/types"
-import { cn } from "@/lib/utils"
+import { useState, useEffect } from 'react'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { Leaf, AlertTriangle, Minus } from 'lucide-react'
+import type { Habit } from '@/lib/types'
+import { cn } from '@/lib/utils'
 
 interface HabitFormProps {
   onSubmit: (habit: Habit) => void
@@ -20,17 +20,17 @@ interface HabitFormProps {
 }
 
 export default function HabitForm({ onSubmit, onCancel, initialData }: HabitFormProps) {
-  const [name, setName] = useState(initialData?.name || "")
-  const [description, setDescription] = useState(initialData?.description || "")
-  const [frequency, setFrequency] = useState<"daily" | "weekly" | "monthly">(initialData?.frequency || "daily")
-  const [status, setStatus] = useState<"useful" | "harmful" | "neutral">(initialData?.status || "useful")
+  const [name, setName] = useState(initialData?.name || '')
+  const [description, setDescription] = useState(initialData?.description || '')
+  const [frequency, setFrequency] = useState<'daily' | 'weekly' | 'monthly'>(initialData?.frequency || 'daily')
+  const [status, setStatus] = useState<'useful' | 'harmful' | 'neutral'>(initialData?.status || 'useful')
 
   useEffect(() => {
     if (initialData) {
       setName(initialData.name)
       setDescription(initialData.description)
       setFrequency(initialData.frequency)
-      setStatus(initialData.status || "useful")
+      setStatus(initialData.status || 'useful')
     }
   }, [initialData])
 
@@ -38,7 +38,7 @@ export default function HabitForm({ onSubmit, onCancel, initialData }: HabitForm
     e.preventDefault()
 
     const habit: Habit = {
-      id: initialData?.id || "",
+      id: initialData?.id || '',
       name,
       description,
       frequency,
@@ -52,7 +52,7 @@ export default function HabitForm({ onSubmit, onCancel, initialData }: HabitForm
   return (
     <Card className="w-full mb-6">
       <CardHeader>
-        <CardTitle>{initialData ? "Edit Habit" : "Add New Habit"}</CardTitle>
+        <CardTitle>{initialData ? 'Edit Habit' : 'Add New Habit'}</CardTitle>
       </CardHeader>
       <form onSubmit={handleSubmit}>
         <CardContent className="space-y-4">
@@ -82,7 +82,7 @@ export default function HabitForm({ onSubmit, onCancel, initialData }: HabitForm
             <Label>Frequency</Label>
             <RadioGroup
               value={frequency}
-              onValueChange={(value: "daily" | "weekly" | "monthly") => setFrequency(value)}
+              onValueChange={(value: 'daily' | 'weekly' | 'monthly') => setFrequency(value)}
               className="flex flex-col space-y-1"
             >
               <div className="flex items-center space-x-2">
@@ -104,13 +104,13 @@ export default function HabitForm({ onSubmit, onCancel, initialData }: HabitForm
             <Label>Status</Label>
             <RadioGroup
               value={status}
-              onValueChange={(value: "useful" | "harmful" | "neutral") => setStatus(value)}
+              onValueChange={(value: 'useful' | 'harmful' | 'neutral') => setStatus(value)}
               className="grid grid-cols-3 gap-2"
             >
               <div
                 className={cn(
-                  "flex flex-col items-center space-y-2 border rounded-md p-3 cursor-pointer transition-colors",
-                  status === "useful" ? "bg-green-100 dark:bg-green-900/30 border-green-500" : "hover:bg-muted/50",
+                  'flex flex-col items-center space-y-2 border rounded-md p-3 cursor-pointer transition-colors',
+                  status === 'useful' ? 'bg-green-100 dark:bg-green-900/30 border-green-500' : 'hover:bg-muted/50',
                 )}
               >
                 <RadioGroupItem value="useful" id="useful" className="sr-only" />
@@ -121,8 +121,8 @@ export default function HabitForm({ onSubmit, onCancel, initialData }: HabitForm
               </div>
               <div
                 className={cn(
-                  "flex flex-col items-center space-y-2 border rounded-md p-3 cursor-pointer transition-colors",
-                  status === "harmful" ? "bg-red-100 dark:bg-red-900/30 border-red-500" : "hover:bg-muted/50",
+                  'flex flex-col items-center space-y-2 border rounded-md p-3 cursor-pointer transition-colors',
+                  status === 'harmful' ? 'bg-red-100 dark:bg-red-900/30 border-red-500' : 'hover:bg-muted/50',
                 )}
               >
                 <RadioGroupItem value="harmful" id="harmful" className="sr-only" />
@@ -133,8 +133,8 @@ export default function HabitForm({ onSubmit, onCancel, initialData }: HabitForm
               </div>
               <div
                 className={cn(
-                  "flex flex-col items-center space-y-2 border rounded-md p-3 cursor-pointer transition-colors",
-                  status === "neutral" ? "bg-gray-100 dark:bg-gray-800/50 border-gray-500" : "hover:bg-muted/50",
+                  'flex flex-col items-center space-y-2 border rounded-md p-3 cursor-pointer transition-colors',
+                  status === 'neutral' ? 'bg-gray-100 dark:bg-gray-800/50 border-gray-500' : 'hover:bg-muted/50',
                 )}
               >
                 <RadioGroupItem value="neutral" id="neutral" className="sr-only" />
@@ -150,10 +150,9 @@ export default function HabitForm({ onSubmit, onCancel, initialData }: HabitForm
           <Button type="button" variant="outline" onClick={onCancel}>
             Cancel
           </Button>
-          <Button type="submit">{initialData ? "Update Habit" : "Add Habit"}</Button>
+          <Button type="submit">{initialData ? 'Update Habit' : 'Add Habit'}</Button>
         </CardFooter>
       </form>
     </Card>
   )
 }
-

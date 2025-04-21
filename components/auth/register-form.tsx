@@ -1,15 +1,15 @@
-"use client"
+'use client'
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import Link from "next/link"
-import { register } from "@/lib/auth/actions"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import GitHubButton from "./github-button"
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import Link from 'next/link'
+import { register } from '@/lib/auth/actions'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { Alert, AlertDescription } from '@/components/ui/alert'
+import GitHubButton from './github-button'
 
 export default function RegisterForm() {
   const [error, setError] = useState<string | null>(null)
@@ -73,13 +73,13 @@ export default function RegisterForm() {
           </div>
 
           <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading ? "Регистрация..." : "Зарегистрироваться"}
+            {isLoading ? 'Регистрация...' : 'Зарегистрироваться'}
           </Button>
         </form>
       </CardContent>
       <CardFooter className="flex justify-center">
         <p className="text-sm text-muted-foreground">
-          Уже есть аккаунт?{" "}
+          Уже есть аккаунт?{' '}
           <Link href="/login" className="text-primary hover:underline">
             Войти
           </Link>
@@ -88,4 +88,3 @@ export default function RegisterForm() {
     </Card>
   )
 }
-

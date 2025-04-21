@@ -1,19 +1,19 @@
-"use client"
+'use client'
 
-import { useState, useEffect } from "react"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import HabitList from "@/components/habit-list"
-import HabitGrid from "@/components/habit-grid"
-import HabitStats from "@/components/habit-stats"
-import Achievements from "@/components/achievements"
-import ShareProgress from "@/components/share-progress"
-import type { Habit, HabitCompletion } from "@/lib/types"
-import confetti from "canvas-confetti"
+import { useState, useEffect } from 'react'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import HabitList from '@/components/habit-list'
+import HabitGrid from '@/components/habit-grid'
+import HabitStats from '@/components/habit-stats'
+import Achievements from '@/components/achievements'
+import ShareProgress from '@/components/share-progress'
+import type { Habit, HabitCompletion } from '@/lib/types'
+import confetti from 'canvas-confetti'
 
 // Import the theme context
-import { useThemeContext } from "@/lib/theme-context"
+import { useThemeContext } from '@/lib/theme-context'
 // Import the indicator
-import { SettingsAppliedIndicator } from "@/components/settings-applied-indicator"
+import { SettingsAppliedIndicator } from '@/components/settings-applied-indicator'
 import {
   updateHabit as updateHabitAction,
   deleteHabit as deleteHabitAction,
@@ -23,18 +23,18 @@ import {
   getUserSettings,
   saveUserSettings,
   getUserAchievements,
-} from "@/lib/db/actions"
-import type { UserSettings } from "@/lib/types"
+} from '@/lib/db/actions'
+import type { UserSettings } from '@/lib/types'
 
 // Default settings
 const defaultSettings: UserSettings = {
-  theme: "system",
-  primaryColor: "blue",
+  theme: 'system',
+  primaryColor: 'blue',
   enableNotifications: false,
-  notificationTime: "20:00",
+  notificationTime: '20:00',
   showConfetti: true,
   shareProgress: false,
-  reminderFrequency: "daily",
+  reminderFrequency: 'daily',
 }
 
 interface HabitDashboardProps {
@@ -45,7 +45,7 @@ export default function HabitDashboard({ userId }: HabitDashboardProps) {
   const [habits, setHabits] = useState<Habit[]>([])
   const [completions, setCompletions] = useState<HabitCompletion[]>([])
   const [settings, setSettings] = useState<UserSettings>(defaultSettings)
-  const [activeTab, setActiveTab] = useState("grid")
+  const [activeTab, setActiveTab] = useState('grid')
   const [isLoading, setIsLoading] = useState(true)
   const [showSettingsApplied, setShowSettingsApplied] = useState(false)
   const [unlockedAchievements, setUnlockedAchievements] = useState<string[]>([])
@@ -81,7 +81,7 @@ export default function HabitDashboard({ userId }: HabitDashboardProps) {
         const achievements = await getUserAchievements(userId)
         if (isMounted) setUnlockedAchievements(achievements)
       } catch (error) {
-        console.error("Ошибка при загрузке данных:", error)
+        console.error('Ошибка при загрузке данных:', error)
       } finally {
         if (isMounted) setIsLoading(false)
       }
@@ -102,7 +102,7 @@ export default function HabitDashboard({ userId }: HabitDashboardProps) {
       // Обновим страницу для отображения изменений
       window.location.reload()
     } catch (error) {
-      console.error("Ошибка при обновлении привычки:", error)
+      console.error('Ошибка при обновлении привычки:', error)
     }
   }
 
@@ -112,7 +112,7 @@ export default function HabitDashboard({ userId }: HabitDashboardProps) {
       setHabits(habits.filter((h) => h.id !== id))
       setCompletions(completions.filter((c) => c.habitId !== id))
     } catch (error) {
-      console.error("Ошибка при удалении привычки:", error)
+      console.error('Ошибка при удалении привычки:', error)
     }
   }
 
@@ -139,7 +139,7 @@ export default function HabitDashboard({ userId }: HabitDashboardProps) {
         }
       }
     } catch (error) {
-      console.error("Ошибка при изменении статуса привычки:", error)
+      console.error('Ошибка при изменении статуса привычки:', error)
     }
   }
 
@@ -153,7 +153,7 @@ export default function HabitDashboard({ userId }: HabitDashboardProps) {
     try {
       // Сначала применяем настройки темы
       if (newSettings.theme !== settings.theme) {
-        document.documentElement.setAttribute("data-theme", newSettings.theme)
+        document.documentElement.setAttribute('data-theme', newSettings.theme)
       }
 
       // Затем сохраняем настройки в базу данных
@@ -162,7 +162,7 @@ export default function HabitDashboard({ userId }: HabitDashboardProps) {
       setPrimaryColor(newSettings.primaryColor as any)
       setShowSettingsApplied(true)
     } catch (error) {
-      console.error("Ошибка при сохранении настроек:", error)
+      console.error('Ошибка при сохранении настроек:', error)
     }
   }
 
@@ -218,4 +218,3 @@ export default function HabitDashboard({ userId }: HabitDashboardProps) {
     </div>
   )
 }
-

@@ -32,7 +32,7 @@ export default function ShareProgress({ habits, completions, shareEnabled }: Sha
   const last30Days = new Date()
   last30Days.setDate(last30Days.getDate() - 30)
 
-  const recentCompletions = completions.filter(c => new Date(c.date) >= last30Days).length
+  const recentCompletions = completions.filter((c) => new Date(c.date) >= last30Days).length
 
   // Generate share text
   const shareText = `Я выполнил(а) ${totalCompletions} привычек в своем пути! Сейчас отслеживаю ${totalHabits} привычек с ${recentCompletions} выполнениями за последние 30 дней. #HabitHubus`
@@ -47,9 +47,7 @@ export default function ShareProgress({ habits, completions, shareEnabled }: Sha
   const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
     shareUrl,
   )}&quote=${encodeURIComponent(shareText)}`
-  const linkedinShareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
-    shareUrl,
-  )}`
+  const linkedinShareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`
 
   return (
     <Dialog>
@@ -62,9 +60,7 @@ export default function ShareProgress({ habits, completions, shareEnabled }: Sha
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Поделиться прогрессом</DialogTitle>
-          <DialogDescription>
-            Поделитесь своим путем формирования привычек с друзьями и семьей
-          </DialogDescription>
+          <DialogDescription>Поделитесь своим путем формирования привычек с друзьями и семьей</DialogDescription>
         </DialogHeader>
 
         <div className="py-4 space-y-4">
@@ -130,4 +126,3 @@ export default function ShareProgress({ habits, completions, shareEnabled }: Sha
     </Dialog>
   )
 }
-

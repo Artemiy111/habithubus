@@ -11,7 +11,6 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata: Metadata = {
   title: 'Habit Tracker',
   description: 'Track and manage your daily habits',
-  generator: 'v0.dev',
 }
 
 export default function RootLayout({

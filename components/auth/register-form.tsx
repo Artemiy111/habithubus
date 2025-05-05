@@ -16,31 +16,40 @@ import { useToast } from '@/hooks/use-toast'
 const registerSchema = z.object({
   email: z.string().email('Введите корректный email'),
   name: z.string().min(2, 'Имя должно содержать минимум 2 символа'),
-  password: z.string().min(6, 'Пароль должен содержать минимум 6 символов'),
+  password: z.string().min(8, 'Пароль должен содержать минимум 8 символов'),
 })
 
 export default function RegisterForm() {
+  const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
-
-  const toast = useToast()
+  const [errors, setErrors] = useState<{form?:string, email? :string, name?: string, password?:string}>({})
+  const {toast} = useToast()
 
   async function handleSubmit(formData: FormData) {
-    setIsLoading(true)
 
     const _data = registerSchema.safeParse(Object.fromEntries(formData.entries()))
     if (_data.error) {
-      toast.toast({ title: 'Ошибка регистрации', description: _data.error.errors[0].message, variant: 'destructive' })
+      const {name, email, password} = _data.error.formErrors.fieldErrors
+      setErrors({
+        name: name ? name.join(', ') : undefined,
+        email: email ? email.join(', ') : undefined,
+        password: password ? password.join(', ') : undefined,
+      })
       return
     }
+    setIsLoading(true)
 
-    const result = await authClient.signUp.email({ ..._data.data, callbackURL: '/' })
+    const result = await authClient.signUp.email({ ..._data.data})
 
     setIsLoading(false)
+
     if (result.error) {
-      toast.toast({ title: 'Ошибка регистрации', description: result.error.statusText, variant: 'destructive' })
+      setErrors({form: 'Ошибка регистрации'})
+      toast({ title: 'Ошибка регистрации', description: result.error.statusText, variant: 'destructive' })
       return
     }
-    toast.toast({ title: 'Регистрация успешена', description: 'Вы успешно вошли', variant: 'default' })
+    toast({ title: 'Регистрация успешена', description: 'Вы успешно вошли', variant: 'default' })
+    router.push('/')
   }
 
   return (
@@ -65,17 +74,22 @@ export default function RegisterForm() {
           <div className="space-y-2">
             <Label htmlFor="name">Имя</Label>
             <Input id="name" name="name" required />
+            {errors.name &&  <p className='text-destructive' >{errors.name}</p>}
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
             <Input id="email" name="email" type="email" required />
+            {errors.email &&  <p className='text-destructive' >{errors.email}</p>} 
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="password">Пароль</Label>
             <Input id="password" name="password" type="password" required />
+            {errors.password &&  <p className='text-destructive' >{errors.password}</p>}
           </div>
+
+          {errors.form &&  <p className='text-destructive' >{errors.form}</p>}
 
           <Button type="submit" className="w-full" disabled={isLoading}>
             {isLoading ? 'Регистрация...' : 'Зарегистрироваться'}

@@ -107,7 +107,7 @@ export default function HabitDashboard({ userId }: HabitDashboardProps) {
     }
   }
 
-  const toggleCompletion = async (habitId: string, date: string) => {
+  const toggleCompletion = async (habitId: string, date: string, isHarmfull: boolean) => {
     try {
       const existingCompletion = completions.find((c) => c.habitId === habitId && c.date === date)
 
@@ -118,7 +118,7 @@ export default function HabitDashboard({ userId }: HabitDashboardProps) {
       } else {
         setCompletions([...completions, updatedCompletion])
 
-        if (settings.showConfetti) {
+        if (settings.showConfetti && !isHarmfull) {
           confetti({
             particleCount: 100,
             spread: 70,

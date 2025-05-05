@@ -14,7 +14,7 @@ import { cn } from '@/lib/utils'
 interface HabitListProps {
   habits: Habit[]
   completions: HabitCompletion[]
-  onToggleCompletion: (habitId: string, date: string) => void
+  onToggleCompletion: (habitId: string, date: string, isHarmfull: boolean) => void
   onEdit: (habit: Habit) => void
   onDelete: (id: string) => void
 }
@@ -34,8 +34,8 @@ export default function HabitList({ habits, completions, onToggleCompletion, onE
   }
 
   // Toggle habit completion for today
-  const toggleTodayCompletion = (habitId: string) => {
-    onToggleCompletion(habitId, today)
+  const toggleTodayCompletion = (habitId: string, isHarmfull: boolean) => {
+    onToggleCompletion(habitId, today, isHarmfull)
   }
 
   // Generate dates for the last 7 days
@@ -130,7 +130,7 @@ export default function HabitList({ habits, completions, onToggleCompletion, onE
                       variant={isCompletedToday(habit.id) ? 'default' : 'outline'}
                       size="icon"
                       className={cn('mr-3 h-8 w-8', isCompletedToday(habit.id) && 'bg-green-600 hover:bg-green-700')}
-                      onClick={() => toggleTodayCompletion(habit.id)}
+                      onClick={() => toggleTodayCompletion(habit.id, habit.status === 'harmful')}
                     >
                       {isCompletedToday(habit.id) ? <Check className="h-4 w-4" /> : <X className="h-4 w-4" />}
                     </Button>
@@ -187,7 +187,7 @@ export default function HabitList({ habits, completions, onToggleCompletion, onE
                             return (
                               <button
                                 key={date}
-                                onClick={() => onToggleCompletion(habit.id, date)}
+                                onClick={() => onToggleCompletion(habit.id, date, habit.status === 'harmful')}
                                 className={cn(
                                   'flex flex-col items-center justify-center rounded-md p-2 text-xs transition-colors',
                                   completed

@@ -10,34 +10,43 @@ import GitHubButton from './github-button'
 import { authClient } from '@/lib/auth-client'
 import { z } from 'zod'
 import { useToast } from '@/hooks/use-toast'
+import { useRouter } from 'next/navigation'
 
 const loginSchema = z.object({
   email: z.string().email('Введите корректный email'),
-  password: z.string().min(1, 'Введите пароль'),
+  password: z.string().min(8, 'Пароль должен содержать минимум 8 символов'),
 })
 
 export default function LoginForm() {
   const [isLoading, setIsLoading] = useState(false)
-
-  const toast = useToast()
+  const [errors, setErrors] = useState<{form?:string, email? :string, password?:string}>({})
+  const router = useRouter()
+  const {toast} = useToast()
 
   async function handleSubmit(formData: FormData) {
-    setIsLoading(true)
-
+    
     const _data = loginSchema.safeParse(Object.fromEntries(formData.entries()))
     if (_data.error) {
-      toast.toast({ title: 'Ошибка ввода', description: _data.error.errors[0].message, variant: 'destructive' })
+      const {email, password} = _data.error.formErrors.fieldErrors
+      setErrors({
+        email: email ? email.join(', ') : undefined,
+        password: password ? password.join(', ') : undefined,
+      })
       return
     }
+    setIsLoading(true)
 
-    const result = await authClient.signIn.email({ ..._data.data, callbackURL: '/' })
-
+    const result = await authClient.signIn.email({ ..._data.data })
+    
     setIsLoading(false)
+
     if (result.error) {
-      toast.toast({ title: 'Ошибка входа', description: result.error.statusText, variant: 'destructive' })
+      setErrors({form: 'Ошибка входа'})
+      toast({ title: 'Ошибка входа', description: result.error.statusText, variant: 'destructive' })
       return
     }
-    toast.toast({ title: 'Вход успешен', description: 'Вы успешно вошли', variant: 'default' })
+    toast({ title: 'Вход успешен', description: 'Вы успешно вошли', variant: 'default' })
+    router.push('/')
   }
 
   return (
@@ -54,7 +63,7 @@ export default function LoginForm() {
             <span className="w-full border-t" />
           </div>
           <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-background px-2 text-muted-foreground">Или</span>
+            <p className="bg-background px-2 text-muted-foreground">Или</p>
           </div>
         </div>
 
@@ -62,12 +71,16 @@ export default function LoginForm() {
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
             <Input id="email" name="email" type="email" required />
+            {errors.email &&  <p className='text-destructive' >{errors.email}</p>}
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="password">Пароль</Label>
             <Input id="password" name="password" type="password" required />
+            {errors.password &&  <p className='text-destructive' >{errors.password}</p>}
           </div>
+
+          {errors.form &&  <p className='text-destructive' >{errors.form}</p>}
 
           <Button type="submit" className="w-full" disabled={isLoading}>
             {isLoading ? 'Вход...' : 'Войти'}

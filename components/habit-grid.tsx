@@ -13,7 +13,7 @@ import { cn } from '@/lib/utils'
 interface HabitGridProps {
   habits: Habit[]
   completions: HabitCompletion[]
-  onToggleCompletion: (habitId: string, date: string) => void
+  onToggleCompletion: (habitId: string, date: string, isHarmfull: boolean) => void
 }
 
 export default function HabitGrid({ habits, completions, onToggleCompletion }: HabitGridProps) {
@@ -81,8 +81,9 @@ export default function HabitGrid({ habits, completions, onToggleCompletion }: H
   // Handle cell click to toggle completion
   const handleCellClick = (date: Date) => {
     if (!selectedHabitId) return
-
-    onToggleCompletion(selectedHabitId, formatDateString(date))
+    const habit = habits.find((h) => h.id === selectedHabitId)
+    if (!habit) return
+    onToggleCompletion(selectedHabitId, formatDateString(date), habit.status === 'harmful')
   }
 
   // Get status icon
